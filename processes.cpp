@@ -129,13 +129,14 @@ class ProcessTable {
 
         struct ActiveProcesses get_active() {
 
-            struct ActiveProcesses active_values;
             vector<pid_t> active_pids;
             vector<string> active_cmds;
-
+            pid_t pid;
+            struct ActiveProcesses active_values;
+            
             for (unsigned int i = 0; i < pids.size(); i++) {
 
-                pid_t pid = wait_handler(to_string(pids[i]),1);   
+                pid = wait_handler(to_string(pids[i]),1);   
 
                 if (pid == 0) {
                     active_pids.push_back(pids[i]);
@@ -181,6 +182,28 @@ class ProcessTable {
         }
 
     public:
+        
+        void clean() {
+
+            struct ActiveProcesses active_values = get_active();
+
+            if (active_values.pids.size() > 0) {
+                for (unsigned int i = 0; i < active_values.pids.size(); i++) {
+
+                    string line = pipe(active_values.pids[i]);
+                    vector<string> lines = seperate(line,' ');
+                    char state = lines[6][0];
+                    
+                    if (state == 'R') {
+                        wait_handler(to_string(active_values.pids[i]),0);
+                    }
+
+                    else
+                        kill_cmd(to_string(active_values.pids[i]),SIGKILL);
+                }
+            }
+        }
+
         void push_pid(pid_t pid) {
             pids.push_back(pid);
         }
@@ -207,26 +230,6 @@ class ProcessTable {
             display_time(0);
         }
 
-        void clean() {
-
-            struct ActiveProcesses active_values = get_active();
-
-            if (active_values.pids.size() > 0) {
-                for (unsigned int i = 0; i < active_values.pids.size(); i++) {
-
-                    string line = pipe(active_values.pids[i]);
-                    vector<string> lines = seperate(line,' ');
-                    char state = lines[6][0];
-                    
-                    if (state == 'R') {
-                        wait_handler(to_string(active_values.pids[i]),0);
-                    }
-
-                    else
-                        kill_cmd(to_string(active_values.pids[i]),SIGKILL);
-                }
-            }
-        }
 };
 
 

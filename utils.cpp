@@ -39,17 +39,19 @@ pid_t spawn(vector<string> lines, bool *background) {
     string fileName;
 
     for (unsigned int i = 0; i < lines.size(); i++) {
+        
+        char c = lines[i][0];
 
-        if (i == lines.size() - 1 and lines[i][0] == '&') {
+        if (i == lines.size() - 1 and c == '&') {
             *background = true;
         }
 
-        else if (lines[i][0] != '<' and lines[i][0] != '>') {
+        else if (c != '<' and c != '>') {
             args[argIndex] = (char *) lines[i].c_str();
             argIndex++;
         }
 
-        else if (lines[i][0] == '>') {
+        else if (c == '>') {
             isOutput = true;
             fileName = lines[i].substr(1,lines[i].size() - 1);
             ofp = (char *) fileName.c_str();
@@ -65,23 +67,18 @@ pid_t spawn(vector<string> lines, bool *background) {
 
     pid = fork();
 
-    if (pid > 0) {
+    if (pid < 0) {
         
-        if(!(*background)) {
-            wait(&status);
-        }
-
-        return pid;
+        perror("Fork failed");
+        return 0;
+        
     }
 
     else if (pid == 0) {
 
         if(isOutput) {
 
-            if (close(STDOUT_FILENO) < 0) {
-                perror("Standard Output File failed to close");
-            }
-
+            close(STDOUT_FILENO);
             if(open(ofp, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU) < 0) {
                 perror("Output file failed to open");
             }
@@ -90,10 +87,7 @@ pid_t spawn(vector<string> lines, bool *background) {
 
         if(isInput) {
 
-            if(close(STDIN_FILENO) < 0) {
-                perror("Standard Input File failed to close");
-            }
-
+            close(STDIN_FILENO);
             if(open(ifp, O_RDONLY, S_IRWXU) < 0) {
                 perror("Input file failed to open");
             }
@@ -104,8 +98,13 @@ pid_t spawn(vector<string> lines, bool *background) {
     }
 
     else {
-        perror("Fork failed");
-        return 0;
+
+        if( !(*background) ) {
+            wait(&status);
+        }
+
+        return pid;
+
     }
 
 }
