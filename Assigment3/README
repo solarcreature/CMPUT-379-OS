@@ -1,0 +1,11 @@
+References Used:
+
+1. http://home.iitk.ac.in/~chebrolu/ee673-f06/sockets.pdf - Socket Understanding
+2. https://www.binarytides.com/socket-programming-c-linux-tutorial/ - Socket Code
+3. https://www.binarytides.com/server-client-example-c-sockets-linux/ - Server Client starter code
+4. https://www.epochconverter.com/ - epoch time function
+5. https://www.linuxhowtos.org/System/creatingman.htm - Creating man page formatting
+6. https://www.gnu.org/software/groff/manual/groff.pdf - Figuring how to get pdf
+7. https://forums.linuxmint.com/viewtopic.php?t=271604 - Figuring how to get pdf
+8. http://hints.macworld.com/article.php?story=20051020122911920 - Figuring how to get pdf
+9. https://gist.github.com/elvinio/387b92a775f7ff426124 - Polling help

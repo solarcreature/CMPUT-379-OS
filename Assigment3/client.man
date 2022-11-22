@@ -1,0 +1,13 @@
+.TH client 1 "21 Nov 2022" "version 1.0" "Client Manual"
+.SH NAME
+\fBclient\fP - client process to send transactions to server
+.SH SYNOPSIS
+\fBclient\fP port ipaddress
+.SH DESCRIPTION
+Spawns a \fBclient\fP process that sends transactions to a server.
+\fBport\fP is the port number that the client and the server will run on.
+\fBipaddress\fP is the IP address of the server.
+When run, it generates a log file named machinename.pid.log that logs all transactions sent to the server.
+.SH SEE ALSO
+server(1)
+

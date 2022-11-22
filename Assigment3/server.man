@@ -1,0 +1,12 @@
+.TH server 1 "21 Nov 2022" "version 1.0" "Server Manual"
+.SH NAME
+\fBserver\fP - server process to receive transactions and communicate with clients
+.SH SYNOPSIS
+\fBserver\fP port
+.SH DESCRIPTION
+Spawns a \fBserver\fP process that can receive transactions and communicate with clients operating on the same port.
+\fBport\fP is the port number that the server and all its clients will run on.
+When run, it logs the output to stdout. Can handle maximum 20 waiting clients. Server will quit if there are more than 20 waiting clients or after 30 seconds of client connection inactivity.
+.SH SEE ALSO
+client(1)
+
